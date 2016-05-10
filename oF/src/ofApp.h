@@ -5,6 +5,9 @@
 #include "ofxKinect.h"
 #include "ofxGui.h"
 
+#include "timeout.h"
+
+#define BAUD_RATE 115200
 #define KINECT_MAX_THRESHOLD 6000
 
 class ofApp : public ofBaseApp {
@@ -31,9 +34,15 @@ public:
 	
 	void keyPressed(int key);
 	
+	void setupArduino(const int & version);
+	void updateArduino();
+
+	bool bSetupArduino; // flag variable for setting up arduino once
+
 	ofxKinect kinect;
 
-	bool allowSaveMesh;
+	bool allowSaveMesh,
+		 temp;
 	
 	int angle,
 		h,
@@ -59,6 +68,10 @@ public:
 	ofxFloatSlider cameraUpDwn,
 				   cameraInOut,
 				   cameraLeftRight;
+
+    ofArduino	ard;
+
+    timeout timeout;
 
 	ofxButton saveMeshBtn;
 };
