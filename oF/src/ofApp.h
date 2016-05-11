@@ -69,7 +69,8 @@ public:
 				   cameraInOut,
 				   cameraLeftRight;
 
-    ofArduino	ard;
+    // ofArduino	ard;
+    ofSerial ard;
 
     timeout timeout;
 

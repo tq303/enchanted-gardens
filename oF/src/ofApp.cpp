@@ -66,67 +66,72 @@ void ofApp::setup() {
 	cam.lookAt(centreNode);
 
 	// serial
-	ard.connect("COM5", BAUD_RATE);
+	// ard.connect("COM5", BAUD_RATE);
+	ard.listDevices();
+	ard.setup("COM5", 115200);
 
 	// listen for EInitialized notification. this indicates that
 	// the arduino is ready to receive commands and it is safe to
 	// call setupArduino()
-	ofAddListener(ard.EInitialized, this, &ofApp::setupArduino);
+	// ofAddListener(ard.EInitialized, this, &ofApp::setupArduino);
 
-	timeout.set(24);
-	timeout.start();
+	// timeout.set(24);
+	// timeout.start();
 
-	temp = false;
+	// temp = false;
 }
 
 //--------------------------------------------------------------
-void ofApp::setupArduino(const int & version) {
+// void ofApp::setupArduino(const int & version) {
 
-	// remove listener because we don't need it anymore
-	ofRemoveListener(ard.EInitialized, this, &ofApp::setupArduino);
+// 	// remove listener because we don't need it anymore
+// 	ofRemoveListener(ard.EInitialized, this, &ofApp::setupArduino);
     
-    // it is now safe to send commands to the Arduino
-    bSetupArduino = true;
+//     // it is now safe to send commands to the Arduino
+//     bSetupArduino = true;
     
-    // set pins as digital outputs
-	ard.sendDigitalPinMode(4,  ARD_OUTPUT);
-	ard.sendDigitalPinMode(5,  ARD_OUTPUT);
-	ard.sendDigitalPinMode(6,  ARD_OUTPUT);
-	ard.sendDigitalPinMode(7,  ARD_OUTPUT);
-	ard.sendDigitalPinMode(8,  ARD_OUTPUT);
-	ard.sendDigitalPinMode(9,  ARD_OUTPUT);
-	ard.sendDigitalPinMode(10, ARD_OUTPUT);
-	ard.sendDigitalPinMode(11, ARD_OUTPUT);
-}
+//     // set pins as digital outputs
+// 	ard.sendDigitalPinMode(4,  ARD_OUTPUT);
+// 	ard.sendDigitalPinMode(5,  ARD_OUTPUT);
+// 	ard.sendDigitalPinMode(6,  ARD_OUTPUT);
+// 	ard.sendDigitalPinMode(7,  ARD_OUTPUT);
+// 	ard.sendDigitalPinMode(8,  ARD_OUTPUT);
+// 	ard.sendDigitalPinMode(9,  ARD_OUTPUT);
+// 	ard.sendDigitalPinMode(10, ARD_OUTPUT);
+// 	ard.sendDigitalPinMode(11, ARD_OUTPUT);
+// }
 
 //--------------------------------------------------------------
-void ofApp::updateArduino(){
+// void ofApp::updateArduino(){
 	
-	if ( timeout.hasEllapsed() && bSetupArduino ) {
+// 	if ( timeout.hasEllapsed() && bSetupArduino ) {
 
-		ofLogNotice() << "timeout ellapsed";
+// 		ofLogNotice() << "timeout ellapsed";
 
-		ard.sendDigital(4,  ( temp ) ? ARD_HIGH : ARD_LOW );
-		ard.sendDigital(5,  ( temp ) ? ARD_HIGH : ARD_LOW );
-		ard.sendDigital(6,  ( temp ) ? ARD_HIGH : ARD_LOW );
-		ard.sendDigital(7,  ( temp ) ? ARD_HIGH : ARD_LOW );
-		ard.sendDigital(8,  ( temp ) ? ARD_HIGH : ARD_LOW );
-		ard.sendDigital(9,  ( temp ) ? ARD_HIGH : ARD_LOW );
-		ard.sendDigital(10, ( temp ) ? ARD_HIGH : ARD_LOW );
-		ard.sendDigital(11, ( temp ) ? ARD_HIGH : ARD_LOW );
+// 		ard.sendDigital(4,  ( temp ) ? ARD_HIGH : ARD_LOW );
+// 		ard.sendDigital(5,  ( temp ) ? ARD_HIGH : ARD_LOW );
+// 		ard.sendDigital(6,  ( temp ) ? ARD_HIGH : ARD_LOW );
+// 		ard.sendDigital(7,  ( temp ) ? ARD_HIGH : ARD_LOW );
+// 		ard.sendDigital(8,  ( temp ) ? ARD_HIGH : ARD_LOW );
+// 		ard.sendDigital(9,  ( temp ) ? ARD_HIGH : ARD_LOW );
+// 		ard.sendDigital(10, ( temp ) ? ARD_HIGH : ARD_LOW );
+// 		ard.sendDigital(11, ( temp ) ? ARD_HIGH : ARD_LOW );
 
-		temp = !temp;
-	}
+// 		temp = !temp;
+// 	}
 
-	ard.update();
-}
+// 	ard.update();
+// }
 
 //--------------------------------------------------------------
 void ofApp::update() {
 
+	unsigned char transmit[3] = { 0, 1, 2 };
+	
 	ofBackground(0, 0, 0);
 	kinect.update();
-	updateArduino();
+	ard.writeBytes(transmit, 3);
+	// updateArduino();
 }
 
 //--------------------------------------------------------------
